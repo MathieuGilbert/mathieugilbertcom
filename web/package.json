@@ -17,7 +17,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "yarn build && yarn --cwd ./hosting/ cdk deploy"
+    "deploy": "yarn build && yarn --cwd ./hosting/ cdk deploy -c stage=production"
   },
   "eslintConfig": {
     "extends": "react-app"

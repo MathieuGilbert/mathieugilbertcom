@@ -12,11 +12,10 @@ export class HostingStack extends cdk.Stack {
     super(scope, id, props)
 
     const siteBucket = new Bucket(this, 'SiteBucket', {
-      bucketName: 'mathieugilbertcom-test-bucket',
       websiteIndexDocument: 'index.html',
       websiteErrorDocument: 'error.html',
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
-      removalPolicy: cdk.RemovalPolicy.DESTROY // NOT recommended for production code
+      removalPolicy: cdk.RemovalPolicy.RETAIN
     })
     new cdk.CfnOutput(this, 'Bucket', { value: siteBucket.bucketName })
 

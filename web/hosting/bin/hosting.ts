@@ -4,4 +4,13 @@ import * as cdk from '@aws-cdk/core'
 import { HostingStack } from '../lib/hosting-stack'
 
 const app = new cdk.App()
-new HostingStack(app, 'HostingStack')
+
+const appName = app.node.tryGetContext('appName')
+const org = app.node.tryGetContext('org')
+const stage = app.node.tryGetContext('stage')
+if (!appName || !org || !stage) {
+  throw new Error('ckd context values "appName", "org", and "stage" are required.')
+}
+const stackId = `${org}-${appName}-${stage}`
+
+new HostingStack(app, stackId)
