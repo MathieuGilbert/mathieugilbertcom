@@ -7,7 +7,7 @@ const StyledHeader = styled.div`
 
 const Header = () => {
   return (
-    <StyledHeader className={'section'}>
+    <StyledHeader className={'header'}>
       Welcome to my site.
     </StyledHeader>
   )

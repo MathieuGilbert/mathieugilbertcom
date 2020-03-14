@@ -3,11 +3,18 @@ import styled from 'styled-components'
 
 const StyledMenu = styled.div`
   grid-area: menu;
+
+  @media (max-width: 480px) {
+    ul {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
 `
 
 const Menu = () => {
   return (
-    <StyledMenu className={'section'}>
+    <StyledMenu className={'menu'}>
       <ul>
         <li><a href='/'>Home</a></li>
         <li><a href='/'>About</a></li>

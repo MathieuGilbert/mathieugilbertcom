@@ -7,7 +7,7 @@ const StyledFooter = styled.div`
 
 const Footer = () => {
   return (
-    <StyledFooter className={'section'}>
+    <StyledFooter className={'footer'}>
       <span>&copy; Mathieu Gilbert, 2020</span>
     </StyledFooter>
   )

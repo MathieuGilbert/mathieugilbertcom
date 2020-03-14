@@ -7,7 +7,7 @@ const StyledMain = styled.div`
 
 const Main = () => {
   return (
-    <StyledMain className={'section'}>
+    <StyledMain className={'main'}>
       <h1>About</h1>
       <p>
         My name is Mathieu Gilbert.
