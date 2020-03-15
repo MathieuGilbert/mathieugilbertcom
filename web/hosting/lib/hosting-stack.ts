@@ -37,5 +37,6 @@ export class HostingStack extends cdk.Stack {
         }
       ]
     })
+    new cdk.CfnOutput(this, 'DomainName', { value: distribution.domainName })
   }
 }
