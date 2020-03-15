@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 
 const StyledMenu = styled.div`
   grid-area: menu;
@@ -16,9 +17,15 @@ const Menu = () => {
   return (
     <StyledMenu className={'menu'}>
       <ul>
-        <li><a href='/'>Home</a></li>
-        <li><a href='/'>About</a></li>
-        <li><a href='/'>More?</a></li>
+        <li>
+          <Link to='/'>Home</Link>
+        </li>
+        <li>
+          <Link to='/about'>About</Link>
+        </li>
+        <li>
+          <Link to='/more'>More?</Link>
+        </li>
       </ul>
     </StyledMenu>
   )

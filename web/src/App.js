@@ -1,8 +1,12 @@
 import React from 'react'
+import { Router } from 'react-router'
 import { createGlobalStyle } from 'styled-components'
+import { createBrowserHistory } from 'history'
 import { Normalize } from 'styled-normalize'
 import { Layout } from './components'
 import colors from './theme/colors.js'
+
+const history = createBrowserHistory()
 
 const GlobalStyle = createGlobalStyle`
   html, body, #root {
@@ -23,7 +27,9 @@ const App = () => {
     <>
       <Normalize />
       <GlobalStyle />
-      <Layout />
+      <Router history={history}>
+        <Layout />
+      </Router>
     </>
   )
 }
