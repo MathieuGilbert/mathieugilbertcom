@@ -88,16 +88,21 @@ export class PreviewPipelineStack extends cdk.Stack {
       actions: [buildAction]
     })
 
-    return
-
     // Deploy
 
+    const buildSpecDeploy = codebuild.BuildSpec.fromObject({
+      version: '0.2',
+      phases: {
+        deploy: {
+          commands: [
+            'yarn --cwd ./hosting cdk deploy',
+          ],
+        }
+      }
+    })
 
     const codeDeployProject = new codebuild.PipelineProject(this, 'DeployPipelineProject', {
-      buildSpec: {
-        isImmediate: false,
-        toBuildSpec: () => 'yarn --cwd ./hosting cdk deploy  -c stage=pipeline'
-      },
+      buildSpec: buildSpecDeploy,
       environment: {
           buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_2
         }
@@ -115,6 +120,8 @@ export class PreviewPipelineStack extends cdk.Stack {
       stageName: 'Deploy',
       actions: [deployAction]
     })
+
+    return
 
     // Notify
     pipeline.addStage({
