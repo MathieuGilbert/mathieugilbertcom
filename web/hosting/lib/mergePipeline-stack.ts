@@ -118,7 +118,7 @@ export class MergePipelineStack extends cdk.Stack {
     const deployAction = new actions.CodeBuildAction({
       actionName: "DeployAction",
       project: codeDeployProject,
-      input: buildOutput,
+      input: sourceOutput,
       outputs: [deployOutput]
     })
     pipeline.addStage({
