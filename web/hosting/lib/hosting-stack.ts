@@ -3,7 +3,6 @@ import { Bucket, BlockPublicAccess } from '@aws-cdk/aws-s3'
 import { BucketDeployment, Source } from '@aws-cdk/aws-s3-deployment'
 import {
   CloudFrontWebDistribution,
-  CloudFrontWebDistributionProps,
   OriginAccessIdentity
 } from '@aws-cdk/aws-cloudfront'
 
