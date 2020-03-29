@@ -91,7 +91,7 @@ export class MergePipelineStack extends cdk.Stack {
     const buildSpecDeploy = codebuild.BuildSpec.fromObject({
       version: '0.2',
       phases: {
-        deploy: {
+        post_build: {
           commands: [
             'yarn --cwd ./hosting deploy:hosting -c stage=production',
           ]
