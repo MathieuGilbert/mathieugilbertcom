@@ -93,7 +93,7 @@ export class MergePipelineStack extends cdk.Stack {
       phases: {
         post_build: {
           commands: [
-            'yarn --cwd ./hosting deploy:hosting -c stage=production',
+            'yarn --cwd web/hosting deploy:hosting -c stage=production',
           ]
         }
       }
