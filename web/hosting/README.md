@@ -2,15 +2,26 @@
 
 This deploys a React site to s3 and hosts it via CloudFront.
 
+`yarn deploy:hosting -c stage=production`
+
+
 ##  Pipelines
 
-*Re%%zZXquires creating a Personal Access Token in GitHub and storing it in S*
+*Requires creating a Personal Access Token in GitHub and storing it in Secrets Manager*
+
+*previewPipeline*
+
+`WIP`
 
 - Open Github pull request
   - source
   - build
   - deploy
   - report status & add comment to PR with branch-specific URL
+
+*mergePipeline*
+
+`yarn deploy:mergePipeline`
 
 - Merge to master
   - source
@@ -20,8 +31,6 @@ This deploys a React site to s3 and hosts it via CloudFront.
 TODO: tests
 
 
-
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
 ## Useful commands
 

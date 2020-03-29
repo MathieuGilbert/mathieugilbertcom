@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node bin/hosting.ts",
+  "app": "npx ts-node bin/create-hosting.ts",
   "context": {
     "appName": "web",
     "org": "mathieugilbert"

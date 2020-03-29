@@ -2,9 +2,9 @@ import * as cdk from '@aws-cdk/core'
 import * as codepipeline from '@aws-cdk/aws-codepipeline'
 import * as actions from '@aws-cdk/aws-codepipeline-actions'
 import * as codebuild from '@aws-cdk/aws-codebuild'
-import * as ssm from '@aws-cdk/aws-ssm'
+import * as iam from '@aws-cdk/aws-iam'
 
-export class PreviewPipelineStack extends cdk.Stack {
+export class MergePipelineStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props)
 
@@ -29,7 +29,7 @@ export class PreviewPipelineStack extends cdk.Stack {
       actions: [sourceAction]
     })
 
-    const webhook = new codepipeline.CfnWebhook(this, 'Webhook', {
+    new codepipeline.CfnWebhook(this, 'Webhook', {
       authentication: 'GITHUB_HMAC',
       authenticationConfiguration: {
         secretToken: oauthToken.toString()
@@ -45,26 +45,24 @@ export class PreviewPipelineStack extends cdk.Stack {
       targetPipelineVersion: 1
     })
 
-
-
-
     // Build
 
     const buildSpec = codebuild.BuildSpec.fromObject({
       version: '0.2',
       phases: {
         install: {
-          'runtime-versions': { nodejs: 12 },
+          'runtime-versions': {
+            nodejs: 12
+          },
           commands: [
-            'cd web',
-            'yarn install'
-          ],
+            'yarn --cwd web install'
+          ]
         },
         build: {
           commands: [
             'yarn --cwd web build'
-          ],
-        },
+          ]
+        }
       }
     })
 
@@ -95,8 +93,8 @@ export class PreviewPipelineStack extends cdk.Stack {
       phases: {
         deploy: {
           commands: [
-            'yarn --cwd ./hosting cdk deploy',
-          ],
+            'yarn --cwd ./hosting deploy:hosting -c stage=production',
+          ]
         }
       }
     })
@@ -109,10 +107,17 @@ export class PreviewPipelineStack extends cdk.Stack {
       }
     )
 
+    const policyStatement = new iam.PolicyStatement()
+    policyStatement.addActions(...[
+      '*'
+    ])
+    policyStatement.addResources("*")
+    codeDeployProject.addToRolePolicy(policyStatement)
+
     const deployOutput = new codepipeline.Artifact()
     const deployAction = new actions.CodeBuildAction({
-      actionName: "CodeBuild",
-      project: codeBuildProject,
+      actionName: "DeployAction",
+      project: codeDeployProject,
       input: buildOutput,
       outputs: [deployOutput]
     })
