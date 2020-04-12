@@ -66,6 +66,12 @@ export class MergePipelineStack extends cdk.Stack {
             'yarn --cwd web build'
           ]
         }
+      },
+      artifacts: {
+        'base-directory': 'dist',
+        files: [
+          'HostingStack.template.json'
+        ]
       }
     })
 
@@ -91,33 +97,46 @@ export class MergePipelineStack extends cdk.Stack {
 
     // Deploy
 
-    const deployBuildSpec = codebuild.BuildSpec.fromObject({
-      version: '0.2',
-      phases: {
-        build: {
-          commands: [
-            'yarn --cwd web/hosting deploy:hosting -c stage=production',
-          ]
-        }
-      }
+// ~~~~~~~~~~~~~
+    // const deployBuildSpec = codebuild.BuildSpec.fromObject({
+    //   version: '0.2',
+    //   phases: {
+    //     build: {
+    //       commands: [
+    //         'yarn --cwd web/hosting deploy:hosting -c stage=production',
+    //       ]
+    //     }
+    //   }
+    // })
+
+    // const codeDeployProject = new codebuild.PipelineProject(this, 'DeployPipelineProject', {
+    //   buildSpec: deployBuildSpec,
+    //   environment: {
+    //       buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_2
+    //     }
+    //   }
+    // )
+
+    // const policyStatement = new iam.PolicyStatement()
+    // policyStatement.addActions(...[
+    //   '*'
+    // ])
+    // policyStatement.addResources("*")
+    // codeDeployProject.addToRolePolicy(policyStatement)
+// ~~~~~~~~~~~~~~
+
+
+
+    const deployAction = new pipelineActions.CloudFormationCreateUpdateStackAction({
+      actionName: 'DeployAction',
+      adminPermissions: true,
+      templatePath: buildOutput.atPath('HostingStack.template.json'),
+      stackName: 'HostingDeployStack'
     })
 
-    const codeDeployProject = new codebuild.PipelineProject(this, 'DeployPipelineProject', {
-      buildSpec: deployBuildSpec,
-      environment: {
-          buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_2
-        }
-      }
-    )
 
 
-    const policyStatement = new iam.PolicyStatement()
-    policyStatement.addActions(...[
-      '*'
-    ])
-    policyStatement.addResources("*")
-    codeDeployProject.addToRolePolicy(policyStatement)
-
+// ~~~~~~~~~~
     // const hostingStack = new HostingStack(scope, 'mathieugilbert-web-production')
 
   //   const hostingBucket = cdk.Fn.importValue('Bucket')
@@ -133,7 +152,7 @@ export class MergePipelineStack extends cdk.Stack {
   //     input: buildOutput,
   //     bucket: buck
   //   })
-
+// ~~~~~~~~~~~~~
     // const deployAction = new appDelivery.PipelineDeployStackAction({
     //   stack: hostingStack,
     //   input: buildOutput,
@@ -145,14 +164,15 @@ export class MergePipelineStack extends cdk.Stack {
     //   project: codeDeployProject,
     //   input: sourceOutput
     // })
-    const deployOutput = new codepipeline.Artifact()
-    const deployAction = new pipelineActions.CodeBuildAction({
-      actionName: "DeployAction",
-      project: codeDeployProject,
-      input: sourceOutput,
-      outputs: [deployOutput]
-    })
-
+// ~~~~~~~~~~~~~~~
+    // const deployOutput = new codepipeline.Artifact()
+    // const deployAction = new pipelineActions.CodeBuildAction({
+    //   actionName: "DeployAction",
+    //   project: codeDeployProject,
+    //   input: sourceOutput,
+    //   outputs: [deployOutput]
+    // })
+// ~~~~~~~~~~~~~~
     pipeline.addStage({
       stageName: 'Deploy',
       actions: [deployAction]
