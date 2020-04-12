@@ -2,6 +2,21 @@
 # yarn lockfile v1
 
 
+"@aws-cdk/app-delivery@1.31.0":
+  version "1.31.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/app-delivery/-/app-delivery-1.31.0.tgz#f1c5a46fef087258d7c756b912e0c26d3b679b96"
+  integrity sha512-1GQHkBkMigjmKmZX12CZheWjr1bOinnmNRUUv42hlwxyRyghuYG5uGyWPPuGLj0RpeANTZ1Eo/0X3NPXRL5x/A==
+  dependencies:
+    "@aws-cdk/aws-cloudformation" "1.31.0"
+    "@aws-cdk/aws-codebuild" "1.31.0"
+    "@aws-cdk/aws-codepipeline" "1.31.0"
+    "@aws-cdk/aws-codepipeline-actions" "1.31.0"
+    "@aws-cdk/aws-events" "1.31.0"
+    "@aws-cdk/aws-iam" "1.31.0"
+    "@aws-cdk/core" "1.31.0"
+    "@aws-cdk/cx-api" "1.31.0"
+    constructs "^2.0.0"
+
 "@aws-cdk/assert@1.31.0":
   version "1.31.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/assert/-/assert-1.31.0.tgz#64b636a4aeabfe767382e35c7f5dbf3617865b97"
@@ -189,7 +204,7 @@
     "@aws-cdk/core" "1.31.0"
     constructs "^2.0.0"
 
-"@aws-cdk/aws-codepipeline-actions@^1.31.0":
+"@aws-cdk/aws-codepipeline-actions@1.31.0", "@aws-cdk/aws-codepipeline-actions@^1.31.0":
   version "1.31.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-codepipeline-actions/-/aws-codepipeline-actions-1.31.0.tgz#7a9448118672d5bb89ceba46cfaa4bdd45afda9f"
   integrity sha512-VvXuK2xdAPgAod81N3vqZCGXUtkzSkx7NU9Uqs2GiefzG2fSNHspk1U/f8MSBBs3Jz5QpRG45HkMOZHyOUJP+Q==

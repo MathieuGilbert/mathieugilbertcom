@@ -1,8 +1,11 @@
 import * as cdk from '@aws-cdk/core'
 import * as codepipeline from '@aws-cdk/aws-codepipeline'
-import * as actions from '@aws-cdk/aws-codepipeline-actions'
+import * as pipelineActions from '@aws-cdk/aws-codepipeline-actions'
 import * as codebuild from '@aws-cdk/aws-codebuild'
 import * as iam from '@aws-cdk/aws-iam'
+import * as appDelivery from '@aws-cdk/app-delivery'
+import { Bucket } from '@aws-cdk/aws-s3'
+import { HostingStack } from './hosting-stack'
 
 export class MergePipelineStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -15,13 +18,13 @@ export class MergePipelineStack extends cdk.Stack {
     })
 
     const sourceOutput = new codepipeline.Artifact()
-    const sourceAction = new actions.GitHubSourceAction({
+    const sourceAction = new pipelineActions.GitHubSourceAction({
       actionName: 'SourceFromGitHub',
       oauthToken,
       output: sourceOutput,
       owner: 'MathieuGilbert',
       repo: 'mathieugilbertcom',
-      trigger: actions.GitHubTrigger.WEBHOOK
+      trigger: pipelineActions.GitHubTrigger.WEBHOOK
     })
 
     pipeline.addStage({
@@ -47,7 +50,7 @@ export class MergePipelineStack extends cdk.Stack {
 
     // Build
 
-    const buildSpec = codebuild.BuildSpec.fromObject({
+    const buildBuildSpec = codebuild.BuildSpec.fromObject({
       version: '0.2',
       phases: {
         install: {
@@ -67,7 +70,7 @@ export class MergePipelineStack extends cdk.Stack {
     })
 
     const codeBuildProject = new codebuild.PipelineProject(this, 'BuildPipelineProject', {
-      buildSpec,
+      buildSpec: buildBuildSpec,
       environment: {
           buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_2
         }
@@ -75,7 +78,7 @@ export class MergePipelineStack extends cdk.Stack {
     )
 
     const buildOutput = new codepipeline.Artifact()
-    const buildAction = new actions.CodeBuildAction({
+    const buildAction = new pipelineActions.CodeBuildAction({
       actionName: "BuildAction",
       project: codeBuildProject,
       input: sourceOutput,
@@ -88,10 +91,10 @@ export class MergePipelineStack extends cdk.Stack {
 
     // Deploy
 
-    const buildSpecDeploy = codebuild.BuildSpec.fromObject({
+    const deployBuildSpec = codebuild.BuildSpec.fromObject({
       version: '0.2',
       phases: {
-        post_build: {
+        build: {
           commands: [
             'yarn --cwd web/hosting deploy:hosting -c stage=production',
           ]
@@ -100,12 +103,13 @@ export class MergePipelineStack extends cdk.Stack {
     })
 
     const codeDeployProject = new codebuild.PipelineProject(this, 'DeployPipelineProject', {
-      buildSpec: buildSpecDeploy,
+      buildSpec: deployBuildSpec,
       environment: {
           buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_2
         }
       }
     )
+
 
     const policyStatement = new iam.PolicyStatement()
     policyStatement.addActions(...[
@@ -114,13 +118,41 @@ export class MergePipelineStack extends cdk.Stack {
     policyStatement.addResources("*")
     codeDeployProject.addToRolePolicy(policyStatement)
 
+    // const hostingStack = new HostingStack(scope, 'mathieugilbert-web-production')
+
+  //   const hostingBucket = cdk.Fn.importValue('Bucket')
+  //   const buck = new Bucket(scope, hostingBucket)
+
+  //   const bucket = Bucket.fromBucketAttributes(this, 'Bucket', {
+  //     bucketArn: 'arn:aws:s3:::my-bucket'
+  // }
+
+
+  //   const deployAction = new pipelineActions.S3DeployAction({
+  //     actionName: 'Website',
+  //     input: buildOutput,
+  //     bucket: buck
+  //   })
+
+    // const deployAction = new appDelivery.PipelineDeployStackAction({
+    //   stack: hostingStack,
+    //   input: buildOutput,
+    //   adminPermissions: false
+    // })
+
+    // const deployAction = new actions.S3DeployAction({
+    //   actionName: "DeployAction",
+    //   project: codeDeployProject,
+    //   input: sourceOutput
+    // })
     const deployOutput = new codepipeline.Artifact()
-    const deployAction = new actions.CodeBuildAction({
+    const deployAction = new pipelineActions.CodeBuildAction({
       actionName: "DeployAction",
       project: codeDeployProject,
       input: sourceOutput,
       outputs: [deployOutput]
     })
+
     pipeline.addStage({
       stageName: 'Deploy',
       actions: [deployAction]

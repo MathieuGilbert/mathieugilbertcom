@@ -1,7 +1,7 @@
 
 ## Manually deploy:
 
-`yarn deploy:hosting`
+`yarn deploy`
 
 
 ## old README.md
