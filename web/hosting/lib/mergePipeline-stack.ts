@@ -58,12 +58,14 @@ export class MergePipelineStack extends cdk.Stack {
             nodejs: 12
           },
           commands: [
-            'yarn --cwd web install'
+            'yarn --cwd web install',
+            'yarn --cwd web/hosting install'
           ]
         },
         build: {
           commands: [
-            'yarn --cwd web build'
+            'yarn --cwd web build',
+            'yarn --cwd web/hosting build'
           ]
         }
       },
