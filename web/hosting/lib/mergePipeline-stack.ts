@@ -68,12 +68,6 @@ export class MergePipelineStack extends cdk.Stack {
             'yarn --cwd web/hosting build'
           ]
         }
-      },
-      artifacts: {
-        'base-directory': 'dist',
-        files: [
-          'HostingStack.template.json'
-        ]
       }
     })
 
