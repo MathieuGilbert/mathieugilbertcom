@@ -8,7 +8,8 @@ const StyledHeader = styled.div`
 const Header = () => {
   return (
     <StyledHeader className={'header'}>
-      Welcome to my site.
+      Welcome to my site.<br />
+      YOU HAVE BEEN CI/CD!
     </StyledHeader>
   )
 }
