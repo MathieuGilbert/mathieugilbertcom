@@ -3,7 +3,7 @@ import React from 'react'
 const Home = () => {
   return (
     <div className={'home'}>
-      TURDS!<br />
+      TURDS!!<br />
       Here is the home you requested...
       <br />
       ... home.
