@@ -119,6 +119,7 @@ export class MergePipelineStack extends cdk.Stack {
     // ])
     // policyStatement.addResources("*")
     // codeDeployProject.addToRolePolicy(policyStatement)
+
 // ~~~~~~~~~~~~~~
 
 
