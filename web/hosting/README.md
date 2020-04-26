@@ -22,6 +22,8 @@ This deploys a React site to s3 and hosts it via CloudFront.
 *mergePipeline*
 
 `yarn deploy:mergePipeline`
+vs
+`yarn deploy:pipeline`
 
 - Merge to master
   - source
