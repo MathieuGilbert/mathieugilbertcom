@@ -76,6 +76,7 @@ const setupBuildStep = (scope: cdk.Construct, pipeline: codepipeline.Pipeline, s
           nodejs: 12
         },
         commands: [
+          'yarn --cwd web global add aws-cdk',
           'yarn --cwd web install'
         ]
       },
