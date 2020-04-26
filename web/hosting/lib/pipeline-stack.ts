@@ -81,9 +81,14 @@ const setupBuildStep = (scope: cdk.Construct, pipeline: codepipeline.Pipeline, s
       },
       build: {
         commands: [
-          'yarn --cwd web build'
+          'yarn --cwd web build',
+          'yarn --cwd web synth'
         ]
       }
+    },
+    artifacts: {
+      baseDirectory: 'dist',
+      files: '**/*'
     }
   })
 
@@ -151,7 +156,7 @@ export class PipelineStack extends cdk.Stack {
 
     const buildOutput = setupBuildStep(this, pipeline, sourceOutput)
 
-    setupSelfUpdateStep(this, pipeline, buildOutput)
+    // setupSelfUpdateStep(this, pipeline, buildOutput)
 
     setupDeployStep(this, pipeline, buildOutput)
   }
