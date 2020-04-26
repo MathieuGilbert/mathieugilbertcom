@@ -20,7 +20,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "yarn --cwd hosting deploy:hosting",
-    "synth": "cdk synth -- -o dist"
+    "synth": "cdk synth -- -o dist --app mg-web-pipeline"
   },
   "eslintConfig": {
     "extends": "react-app"
