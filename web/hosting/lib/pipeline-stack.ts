@@ -83,7 +83,7 @@ const setupBuildStep = (scope: cdk.Construct, pipeline: codepipeline.Pipeline, s
       build: {
         commands: [
           'yarn --cwd web build',
-          'yarn --cwd web synth'
+          'yarn --cwd web/hosting synth'
         ]
       }
     },

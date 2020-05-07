@@ -120,10 +120,10 @@ const setupDeployStep = (scope: cdk.Construct, pipeline: codepipeline.Pipeline, 
   })
   new cdk.CfnOutput(scope, 'Bucket', { value: siteBucket.bucketName })
 
-  new BucketDeployment(scope, 'DeployWithInvalidation', {
-    sources: [buildOutput],
-    destinationBucket: siteBucket
-  })
+  // new BucketDeployment(scope, 'DeployWithInvalidation', {
+  //   sources: [Source.asset('../build/')],
+  //   destinationBucket: siteBucket
+  // })
 
   const originAccessIdentity = new OriginAccessIdentity(scope, 'OriginAccessIdentity')
 

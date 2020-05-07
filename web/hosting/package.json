@@ -11,7 +11,8 @@
     "cdk": "cdk",
     "deploy:hosting": "cdk deploy",
     "deploy:mergePipeline": "cdk deploy --app 'npx ts-node bin/create-mergePipeline.ts'",
-    "deploy:pipeline": "cdk deploy --app 'npx ts-node bin/create-pipeline.ts' '*'"
+    "deploy:pipeline": "cdk deploy --app 'npx ts-node bin/create-pipeline.ts' '*'",
+    "synth": "cdk synth -a 'npx ts-node bin/create-pipeline.ts'"
   },
   "devDependencies": {
     "@aws-cdk/assert": "1.31.0",
