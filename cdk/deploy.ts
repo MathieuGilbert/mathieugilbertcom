@@ -1,22 +1,31 @@
 const { execSync } = require('child_process')
 
-const exec = (command: string) => execSync(command, { stdio: 'inherit' })
-
 const env = process.argv[2]
 if (env == null) {
   throw new Error('Environment param required (ex: node-ts deploy.ts staging)')
 }
-//  cdk deploy mathieu-ContainerStack --context env=mathieu
-// container
-const frontendPath = '../container'
+
+const exec = (command: string) => execSync(command, { stdio: 'inherit' })
+
+const install = (frontendPath: string) =>
+  exec(`npm --prefix ${frontendPath} install`)
+
+const build = (frontendPath: string) =>
+  exec(`npm --prefix ${frontendPath} run build`)
+
+const deploy = (stackName: string) =>
+  exec(
+    `cdk deploy ${env}-${stackName} --context env=${env} --require-approval never `
+  )
 
 // install
-exec(`npm --prefix ${frontendPath} install`)
+install('../container')
+install('../hometown')
 
 // build
-exec(`npm run --prefix ${frontendPath} build`)
+build('../container')
+build('../hometown')
 
 // deploy
-exec(
-  `cdk deploy ${env}-ContainerStack --context env=${env} --require-approval never `
-)
+deploy('ContainerStack')
+deploy('HometownStack')

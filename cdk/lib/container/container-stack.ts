@@ -8,6 +8,8 @@ import * as iam from 'aws-cdk-lib/aws-iam'
 
 export interface ContainerStackProps extends StackProps {}
 
+const frontendPathname = 'container'
+
 export class ContainerStack extends Stack {
   constructor(scope: Construct, id: string, props?: ContainerStackProps) {
     super(scope, id, props)
@@ -72,7 +74,7 @@ export class ContainerStack extends Stack {
     )
 
     new s3deploy.BucketDeployment(this, `${id}-deploy-frontend`, {
-      sources: [s3deploy.Source.asset('../container/build')],
+      sources: [s3deploy.Source.asset(`../${frontendPathname}/build`)],
       destinationBucket: bucket,
       retainOnDelete: false,
       contentLanguage: 'en',
