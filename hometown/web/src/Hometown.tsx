@@ -15,7 +15,7 @@ const HometownPage: React.FC<HomeTownPageProps> = ({
   return <>{`${city}, ${stateProv}, ${country}`}</>
 }
 
-class Hometown extends HTMLElement {
+export class Hometown extends HTMLElement {
   private observer: MutationObserver
   private mountPoint: HTMLElement | null = null
 

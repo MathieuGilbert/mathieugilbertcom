@@ -19,13 +19,10 @@ const deploy = (stackName: string) =>
   )
 
 // install
-install('../container')
-install('../hometown')
+install('../web')
 
 // build
-build('../container')
-build('../hometown')
+build('../web')
 
 // deploy
-deploy('ContainerStack')
 deploy('HometownStack')

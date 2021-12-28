@@ -6,12 +6,10 @@ import * as s3 from 'aws-cdk-lib/aws-s3'
 import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment'
 import * as iam from 'aws-cdk-lib/aws-iam'
 
-export interface HometownStackProps extends StackProps {}
+export interface ContainerStackProps extends StackProps {}
 
-const frontendPathname = 'hometown'
-
-export class HometownStack extends Stack {
-  constructor(scope: Construct, id: string, props?: HometownStackProps) {
+export class ContainerStack extends Stack {
+  constructor(scope: Construct, id: string, props?: ContainerStackProps) {
     super(scope, id, props)
 
     const originAccessIdentity = new cloudfront.OriginAccessIdentity(
@@ -74,7 +72,7 @@ export class HometownStack extends Stack {
     )
 
     new s3deploy.BucketDeployment(this, `${id}-deploy-frontend`, {
-      sources: [s3deploy.Source.asset(`../${frontendPathname}/build`)],
+      sources: [s3deploy.Source.asset(`../web/build`)],
       destinationBucket: bucket,
       retainOnDelete: false,
       contentLanguage: 'en',
