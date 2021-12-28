@@ -62,10 +62,10 @@ jobs:
           node-version: '14.x'
 
       - name: Install dependencies
-        run: npm --prefix container/cdk install
+        run: npm --prefix ../container/cdk install
 
       - name: Deploy
-        run: 'npm --prefix container/cdk run deploy pr${PR}'
+        run: 'npm --prefix ../container/cdk run deploy pr${PR}'
 
   hometown_job:
     name: Job for hometown
@@ -79,7 +79,7 @@ jobs:
           node-version: '14.x'
 
       - name: Install dependencies
-        run: npm --prefix hometown/cdk install
+        run: npm --prefix ../hometown/cdk install
 
       - name: Deploy
-        run: 'npm --prefix hometown/cdk run deploy pr${PR}'
+        run: 'npm --prefix ../hometown/cdk run deploy pr${PR}'
