@@ -1,0 +1,79 @@
+name: Node.js CI
+
+on: [pull_request, push]
+
+jobs:
+  check_changed_folders:
+    name: Check files
+    outputs:
+      run_container: ${{ steps.check_files.outputs.run_container }}
+      run_hometown: ${{ steps.check_files.outputs.run_hometown }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - name: check modified files
+        id: check_files
+        run: |
+          echo "=============== list modified files ==============="
+          git diff --name-only HEAD^ HEAD
+
+          echo "========== check paths of modified files =========="
+          git diff --name-only HEAD^ HEAD > files.txt
+
+          echo "::set-output name=run_container::false"
+          echo "::set-output name=run_hometown::false"
+
+          while IFS= read -r file
+          do
+            if [[ $file == container/* ]]; then
+              echo "::set-output name=run_container::true"
+            fi
+            if [[ $file == hometown/* ]]; then
+              echo "::set-output name=run_hometown::true"
+            fi
+          done < files.txt
+  find_pr:
+    - uses: jwalton/gh-find-current-pr@v1
+      id: findPr
+    - run: echo "Your PR is ${PR}"
+      if: success() && steps.findPr.outputs.number
+      env:
+        PR: ${{ steps.findPr.outputs.pr }}
+
+  container_job:
+    name: Job for container
+    needs: check_changed_folders
+    if: needs.check_changed_folders.outputs.run_container == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+
+      - name: Install dependencies
+        run: npm --prefix container/cdk install
+
+      - name: Deploy
+        run: npm --prefix container/cdk run deploy "pr${PR}"
+
+  hometown_job:
+    name: Job for hometown
+    needs: check_changed_folders
+    if: needs.check_changed_folders.outputs.run_hometown == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+
+      - name: Install dependencies
+        run: npm --prefix hometown/cdk install
+
+      - name: Deploy
+        run: npm --prefix hometown/cdk run deploy "pr${PR}"
