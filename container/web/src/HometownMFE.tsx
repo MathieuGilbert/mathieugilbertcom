@@ -1,27 +1,7 @@
 import React, { useEffect } from 'react'
 import { appendRemoteScript } from './helper/mfe'
 import config from './config.json'
-
-interface HometownMFEProps {
-  country?: string
-  stateProv?: string
-  city?: string
-}
-
-interface HometownPageProps
-  extends React.DetailedHTMLProps<
-      React.HTMLAttributes<HTMLElement>,
-      HTMLElement
-    >,
-    HometownMFEProps {}
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'hometown-page': HometownPageProps
-    }
-  }
-}
+import { HometownMFEProps } from './types'
 
 export const HometownMFE: React.FC<HometownMFEProps> = ({
   country,
@@ -33,5 +13,4 @@ export const HometownMFE: React.FC<HometownMFEProps> = ({
   }, [])
 
   return <hometown-page country={country} stateProv={stateProv} city={city} />
-  // return <hometown-page location={{ country, stateProv, city }} />
 }
