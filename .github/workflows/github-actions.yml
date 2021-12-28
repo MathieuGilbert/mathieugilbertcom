@@ -38,6 +38,9 @@ jobs:
           done < files.txt
 
   find_pr:
+    name: Get PR number
+    needs: check_changed_folders
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
       - uses: jwalton/gh-find-current-pr@v1
@@ -49,7 +52,7 @@ jobs:
 
   container_job:
     name: Job for container
-    needs: check_changed_folders
+    needs: find_pr
     if: needs.check_changed_folders.outputs.run_container == 'true'
     runs-on: ubuntu-latest
     steps:
@@ -66,7 +69,7 @@ jobs:
 
   hometown_job:
     name: Job for hometown
-    needs: check_changed_folders
+    needs: find_pr
     if: needs.check_changed_folders.outputs.run_hometown == 'true'
     runs-on: ubuntu-latest
     steps:
