@@ -1,6 +1,6 @@
 name: Node.js CI
 
-on: [pull_request, push]
+on: [pull_request]
 
 jobs:
   check_changed_folders:
@@ -65,7 +65,7 @@ jobs:
         run: npm --prefix container/cdk install
 
       - name: Deploy
-        run: npm --prefix container/cdk run deploy "pr${PR}"
+        run: 'npm --prefix container/cdk run deploy pr${PR}'
 
   hometown_job:
     name: Job for hometown
@@ -82,4 +82,4 @@ jobs:
         run: npm --prefix hometown/cdk install
 
       - name: Deploy
-        run: npm --prefix hometown/cdk run deploy "pr${PR}"
+        run: 'npm --prefix hometown/cdk run deploy pr${PR}'
