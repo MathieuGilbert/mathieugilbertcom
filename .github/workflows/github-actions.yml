@@ -36,13 +36,16 @@ jobs:
               echo "::set-output name=run_hometown::true"
             fi
           done < files.txt
+
   find_pr:
-    - uses: jwalton/gh-find-current-pr@v1
-      id: findPr
-    - run: echo "Your PR is ${PR}"
-      if: success() && steps.findPr.outputs.number
-      env:
-        PR: ${{ steps.findPr.outputs.pr }}
+    steps:
+      - uses: actions/checkout@v1
+      - uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+      - run: echo "Your PR is ${PR}"
+        if: success() && steps.findPr.outputs.number
+        env:
+          PR: ${{ steps.findPr.outputs.pr }}
 
   container_job:
     name: Job for container
