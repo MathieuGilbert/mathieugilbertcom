@@ -15,7 +15,7 @@ const build = (frontendPath: string) =>
 
 const deploy = (stackName: string) =>
   exec(
-    `cdk deploy ${env}-${stackName} --context env=${env} --require-approval never `
+    `cdk deploy ${env}-${stackName} --context env=${env} --require-approval never --verbose`
   )
 
 // install
