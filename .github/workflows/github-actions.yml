@@ -46,25 +46,14 @@ jobs:
       - uses: jwalton/gh-find-current-pr@v1
         id: findPr
       - run: echo PR is ${PR}
-          export PR=${PR}
-          echo "::set-env name=PR::$PR"
         if: success() && steps.findPr.outputs.number
         env:
           PR: ${{ steps.findPr.outputs.pr }}
     outputs:
       pr: ${{ steps.findPr.outputs.pr }}
 
-  view_env:
-    name: View environment variables
-    needs: find_pr
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Your PR is ${PR} - ${{env.PR}} - ${{steps.findPr.outputs.number}} - ${{needs.find_pr.outputs.pr}}"
-        env:
-          PR: ${{ steps.findPr.outputs.pr }}
-
   container_job:
-    name: Job for container
+    name: Deploy Container MFE
     needs: find_pr
     if: needs.check_changed_folders.outputs.run_container == 'true'
     runs-on: ubuntu-latest
@@ -84,10 +73,10 @@ jobs:
         run: npm --prefix container/cdk install
 
       - name: Deploy
-        run: 'npm --prefix container/cdk run deploy pr${{env.PR}}'
+        run: 'npm --prefix container/cdk run deploy pr${{needs.find_pr.outputs.pr}}'
 
   hometown_job:
-    name: Job for hometown
+    name: Deploy Hometown MFE
     needs: find_pr
     if: needs.check_changed_folders.outputs.run_hometown == 'true'
     runs-on: ubuntu-latest
@@ -112,4 +101,4 @@ jobs:
           aws-account: 586890172263
 
       - name: Deploy
-        run: 'npm --prefix hometown/cdk run deploy pr${{env.PR}}'
+        run: 'npm --prefix hometown/cdk run deploy pr${{needs.find_pr.outputs.pr}}'
