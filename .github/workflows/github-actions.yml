@@ -56,6 +56,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Your PR is ${PR} - ${{env.PR}} - ${{steps.findPr.outputs.number}}"
+        env:
+          PR: ${{ steps.findPr.outputs.pr }}
 
   container_job:
     name: Job for container
