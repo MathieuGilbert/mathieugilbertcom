@@ -120,7 +120,7 @@ jobs:
         with:
           # aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           # aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          role-to-assume: arn:aws:iam::586890172263:role/testing-role-Role-1W2U5EHSZS9D1
+          role-to-assume: arn:aws:iam::586890172263:role/PipelineStack-PipelineStackassumablerole1EF5FD52-1O83EXDV8J4J5
           # role-session-name: CDKDeploySession
           aws-region: us-west-2
         # env:
