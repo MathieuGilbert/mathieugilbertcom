@@ -61,12 +61,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Use Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: '14.x'
-
-      - name: Install dependencies
+      - name: Install CDK dependencies
         run: npm --prefix container/cdk install
 
       - name: Configure AWS credentials
@@ -96,8 +91,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install dependencies
+      - name: Install CDK dependencies
         run: npm --prefix hometown/cdk install
+
+      - name: cdk diff
+        uses: youyo/aws-cdk-github-actions@v2
+        with:
+          cdk_subcommand: 'diff'
+          actions_comment: true
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: 'us-west-2'
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
