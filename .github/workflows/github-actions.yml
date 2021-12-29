@@ -59,7 +59,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       AWS_REGION: 'us-west-2'
-      AWS_ACCOUNT: 586890172263
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     steps:
@@ -95,10 +94,11 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          # aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          # aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: 'arn:aws:iam::586890172263:role/testing-role-Role-1W2U5EHSZS9D1'
+          role-session-name: CDKDeploySession
           aws-region: 'us-west-2'
-          aws-account: 586890172263
 
       - name: Deploy
         run: 'npm --prefix hometown/cdk run deploy pr${{needs.find_pr.outputs.pr}}'
