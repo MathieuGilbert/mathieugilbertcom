@@ -94,6 +94,11 @@ jobs:
       - name: Install CDK dependencies
         run: npm --prefix hometown/cdk install
 
+      - name: Build web frontend
+        run: |
+          npm --prefix hometown/web install
+          npm --prefix hometown/web run build
+
       - name: cdk diff
         uses: youyo/aws-cdk-github-actions@v2
         with:
