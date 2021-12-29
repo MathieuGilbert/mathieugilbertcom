@@ -45,7 +45,9 @@ jobs:
       - uses: actions/checkout@v2
       - uses: jwalton/gh-find-current-pr@v1
         id: findPr
-      - run: echo "Your PR is ${PR}"
+      - run: |
+          export PR=${PR}
+          echo "::set-env name=PR::$PR"
         if: success() && steps.findPr.outputs.number
         env:
           PR: ${{ steps.findPr.outputs.pr }}
