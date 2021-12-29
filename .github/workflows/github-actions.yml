@@ -99,6 +99,7 @@ jobs:
         with:
           cdk_subcommand: 'diff'
           actions_comment: true
+          working_dir: 'hometown/cdk'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
