@@ -70,7 +70,7 @@ jobs:
         run: npm --prefix container/cdk install
 
       - name: Deploy
-        run: 'npm --prefix container/cdk run deploy pr${{PR}}'
+        run: 'npm --prefix container/cdk run deploy pr${{env.PR}}'
 
   hometown_job:
     name: Job for hometown
@@ -97,4 +97,4 @@ jobs:
           aws-region: us-west-2
 
       - name: Deploy
-        run: 'npm --prefix hometown/cdk run deploy pr${{PR}}'
+        run: 'npm --prefix hometown/cdk run deploy pr${{env.PR}}'
