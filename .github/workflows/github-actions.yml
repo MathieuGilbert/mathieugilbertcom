@@ -70,7 +70,7 @@ jobs:
         run: npm --prefix container/cdk install
 
       - name: Deploy
-        run: 'npm --prefix container/cdk run deploy pr$PR'
+        run: 'npm --prefix container/cdk run deploy pr${{steps.findPr.outputs.number}}'
 
   hometown_job:
     name: Job for hometown
@@ -92,4 +92,4 @@ jobs:
         run: npm --prefix hometown/cdk install
 
       - name: Deploy
-        run: 'npm --prefix hometown/cdk run deploy pr$PR'
+        run: 'npm --prefix hometown/cdk run deploy pr${{steps.findPr.outputs.number}}'
