@@ -30,9 +30,11 @@ jobs:
           while IFS= read -r file
           do
             if [[ $file == container/* ]]; then
+              echo "Changes detected in container folder"
               echo "::set-output name=run_container::true"
             fi
             if [[ $file == hometown/* ]]; then
+              echo "Changes detected in hometown folder"
               echo "::set-output name=run_hometown::true"
             fi
           done < files.txt
@@ -51,6 +53,14 @@ jobs:
           PR: ${{ steps.findPr.outputs.pr }}
     outputs:
       pr: ${{ steps.findPr.outputs.pr }}
+
+  destroys:
+    name: Tear down stacks on merge
+    needs: find_pr
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    steps:
+      - name: Teardown PR env
 
   container_job:
     name: Deploy Container MFE

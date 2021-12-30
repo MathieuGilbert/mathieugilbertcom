@@ -9,8 +9,4 @@ const env = app.node.tryGetContext('env') || 'default'
 
 new ContainerStack(app, `${env}-ContainerStack`, {
   description: 'MFE Container',
-  env: {
-    region: process.env.CDK_DEFAULT_REGION,
-    account: process.env.CDK_DEFAULT_ACCOUNT,
-  },
 })
