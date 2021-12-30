@@ -100,7 +100,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
-            github.issues.createComment({ issue_number, owner, repo, body: '${{ steps.outputs.outputs.content }}' });
+            github.issues.createComment({ issue_number, owner, repo, body: JSON.stringify(${{ steps.outputs.outputs.content }}) });
 
   hometown_job:
     name: Deploy Hometown MFE
