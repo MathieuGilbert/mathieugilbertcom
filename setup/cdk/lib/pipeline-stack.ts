@@ -12,31 +12,6 @@ export class PipelineStack extends Stack {
       thumbprints: ['a031c46782e6e6c662c2c87c76da9aa62ccabd8e'],
     })
 
-    const githubOIDCPrincipal = new iam.FederatedPrincipal(
-      'githubOIDC',
-      {
-        federated: githubOIDC.openIdConnectProviderArn,
-      },
-      'sts:AssumeRoleWithWebIdentity'
-    )
-
-    // const policy = new iam.PolicyDocument({
-    //   statements: [
-    //     new iam.PolicyStatement({
-    //       effect: iam.Effect.ALLOW,
-    //       actions: ['sts:AssumeRoleWithWebIdentity'],
-    //       resources: ['*'],
-    //       principals: [githubOIDCPrincipal],
-    //       conditions: {
-    //         stringLike: [
-    //           'token.actions.githubusercontent.com:sub:',
-    //           'repo:MathieuGilbert/mathieugilbertcom:*',
-    //         ],
-    //       },
-    //     }),
-    //   ],
-    // })
-
     const role = new iam.Role(this, `${id}-assumable-role`, {
       assumedBy: new iam.WebIdentityPrincipal(
         githubOIDC.openIdConnectProviderArn,
@@ -55,20 +30,13 @@ export class PipelineStack extends Stack {
       ),
     })
 
-    // role.addToPolicy(
-    //   new iam.PolicyStatement({
-    //     effect: iam.Effect.ALLOW,
-    //     actions: ['sts:AssumeRoleWithWebIdentity'],
-    //     resources: ['*'],
-    //     principals: [githubOIDCPrincipal],
-    //     conditions: {
-    //       stringLike: {
-    //         'token.actions.githubusercontent.com:sub:': [
-    //           'repo:MathieuGilbert/mathieugilbertcom:*',
-    //         ],
-    //       },
-    //     },
-    //   })
-    // )
+    // so it can assume cdk deploy role
+    role.addToPolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ['sts:AssumeRole'],
+        resources: ['*'],
+      })
+    )
   }
 }

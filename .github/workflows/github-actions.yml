@@ -52,6 +52,18 @@ jobs:
     outputs:
       pr: ${{ steps.findPr.outputs.pr }}
 
+  configure_credentials:
+    name: Configure credentials
+    needs: check_changed_folders
+    if: needs.check_changed_folders.outputs.run_container == 'true' || needs.check_changed_folders.outputs.run_hometown == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::586890172263:role/PipelineStack-PipelineStackassumablerole1EF5FD52-1O83EXDV8J4J5
+          aws-region: us-west-2
+
   container_job:
     name: Deploy Container MFE
     needs: find_pr
@@ -59,20 +71,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Install CDK dependencies
         run: npm --prefix container/cdk install
 
-      - name: Configure AWS credentials
-        env:
-          AWS_REGION: 'us-west-2'
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: |
-          aws configure --profile default set aws_access_key_id "$AWS_ACCESS_KEY_ID"
-          aws configure --profile default set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY"
-          aws configure --profile default set region "$AWS_REGION"
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     role-to-assume: arn:aws:iam::586890172263:role/PipelineStack-PipelineStackassumablerole1EF5FD52-1O83EXDV8J4J5
+      #     aws-region: us-west-2
 
       - name: Deploy
         run: 'npm --prefix container/cdk run deploy pr${{needs.find_pr.outputs.pr}}'
@@ -82,10 +91,6 @@ jobs:
     needs: find_pr
     if: needs.check_changed_folders.outputs.run_hometown == 'true'
     runs-on: ubuntu-latest
-    # env:
-    #   AWS_DEFAULT_REGION: us-west-2
-    #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
     permissions:
       id-token: write
@@ -98,38 +103,11 @@ jobs:
       - name: Install CDK dependencies
         run: npm --prefix hometown/cdk install
 
-      # - name: Build web frontend
-      #   run: |
-      #     npm --prefix hometown/web install
-      #     npm --prefix hometown/web run build
-      # - name: cdk diff
-      #   uses: youyo/aws-cdk-github-actions@v2
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
       #   with:
-      #     cdk_subcommand: 'diff'
-      #     actions_comment: true
-      #     working_dir: 'hometown/cdk'
-      #   env:
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     AWS_DEFAULT_REGION: 'us-west-2'
-      #     AWS_DEFAULT_ACCOUNT: 586890172263
-      #     CDK_DEFAULT_REGION: ${{ secrets.CDK_DEFAULT_REGION }}
-      #     CDK_DEFAULT_ACCOUNT: 586890172263
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          # aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          # aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          role-to-assume: arn:aws:iam::586890172263:role/PipelineStack-PipelineStackassumablerole1EF5FD52-1O83EXDV8J4J5
-          # role-session-name: CDKDeploySession
-          aws-region: us-west-2
-        # env:
-        #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        #   AWS_DEFAULT_REGION: 'us-west-2'
-        #   AWS_DEFAULT_ACCOUNT: 586890172263
-        #   CDK_DEFAULT_REGION: ${{ secrets.CDK_DEFAULT_REGION }}
-        #   CDK_DEFAULT_ACCOUNT: 586890172263
+      #     role-to-assume: arn:aws:iam::586890172263:role/PipelineStack-PipelineStackassumablerole1EF5FD52-1O83EXDV8J4J5
+      #     aws-region: us-west-2
 
       - name: Deploy
         run: 'npm --prefix hometown/cdk run deploy pr${{needs.find_pr.outputs.pr}}'
