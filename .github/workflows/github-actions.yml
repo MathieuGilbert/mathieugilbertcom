@@ -54,13 +54,13 @@ jobs:
     outputs:
       pr: ${{ steps.findPr.outputs.pr }}
 
-  destroys:
-    name: Tear down stacks on merge
-    needs: find_pr
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
-    steps:
-      - name: Teardown PR env
+  # destroys:
+  #   name: Tear down stacks on merge
+  #   needs: find_pr
+  #   runs-on: ubuntu-latest
+  #   if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+  #   steps:
+  #     - name: Teardown PR env
 
   container_job:
     name: Deploy Container MFE
