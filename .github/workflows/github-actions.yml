@@ -94,13 +94,16 @@ jobs:
           path: container/cdk/outputs.json
 
       - name: Comment PR
-        uses: actions/github-script@0.3.0
+        uses: actions/github-script@v5
         if: github.event_name == 'pull_request'
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
-            github.issues.createComment({ issue_number, owner, repo, body: JSON.stringify(${{ steps.outputs.outputs.content }}) });
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: JSON.stringify(${{ steps.outputs.outputs.content }})
+            })
 
   hometown_job:
     name: Deploy Hometown MFE
