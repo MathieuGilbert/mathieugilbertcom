@@ -1,4 +1,4 @@
-import { RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib'
+import { CfnOutput, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib'
 import { Construct } from 'constructs'
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront'
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins'
@@ -79,6 +79,10 @@ export class HometownStack extends Stack {
       storageClass: s3deploy.StorageClass.INTELLIGENT_TIERING,
       serverSideEncryption: s3deploy.ServerSideEncryption.AES_256,
       distribution,
+    })
+
+    new CfnOutput(this, 'HometownDomainName', {
+      value: distribution.distributionDomainName,
     })
   }
 }
