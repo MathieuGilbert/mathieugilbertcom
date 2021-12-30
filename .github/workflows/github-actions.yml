@@ -87,6 +87,12 @@ jobs:
       - name: Deploy
         run: 'npm --prefix container/cdk run deploy pr${{needs.find_pr.outputs.pr}}'
 
+      - name: Read outputs.json
+        id: outputs
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./outputs.json
+
       - name: Comment PR
         uses: actions/github-script@0.3.0
         if: github.event_name == 'pull_request'
@@ -94,7 +100,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
-            github.issues.createComment({ issue_number, owner, repo, body: '${{ cat outputs.json }}' });
+            github.issues.createComment({ issue_number, owner, repo, body: '${{ steps.outputs.outputs.content }}' });
 
   hometown_job:
     name: Deploy Hometown MFE
