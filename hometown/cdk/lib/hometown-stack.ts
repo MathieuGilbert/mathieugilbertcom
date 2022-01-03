@@ -1,4 +1,4 @@
-import { RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib'
+import { CfnOutput, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib'
 import { Construct } from 'constructs'
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront'
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins'
@@ -6,10 +6,10 @@ import * as s3 from 'aws-cdk-lib/aws-s3'
 import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment'
 import * as iam from 'aws-cdk-lib/aws-iam'
 
-export interface ContainerStackProps extends StackProps {}
+export interface HometownStackProps extends StackProps {}
 
-export class ContainerStack extends Stack {
-  constructor(scope: Construct, id: string, props?: ContainerStackProps) {
+export class HometownStack extends Stack {
+  constructor(scope: Construct, id: string, props?: HometownStackProps) {
     super(scope, id, props)
 
     const originAccessIdentity = new cloudfront.OriginAccessIdentity(
@@ -72,13 +72,17 @@ export class ContainerStack extends Stack {
     )
 
     new s3deploy.BucketDeployment(this, `${id}-deploy-frontend`, {
-      sources: [s3deploy.Source.asset('../container/build')],
+      sources: [s3deploy.Source.asset(`../web/build`)],
       destinationBucket: bucket,
       retainOnDelete: false,
       contentLanguage: 'en',
       storageClass: s3deploy.StorageClass.INTELLIGENT_TIERING,
       serverSideEncryption: s3deploy.ServerSideEncryption.AES_256,
       distribution,
+    })
+
+    new CfnOutput(this, 'HometownDomainName', {
+      value: distribution.distributionDomainName,
     })
   }
 }
