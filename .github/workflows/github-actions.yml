@@ -54,18 +54,18 @@ jobs:
     outputs:
       pr: ${{ steps.findPr.outputs.pr }}
 
-  destroy:
-    name: Tear down stacks on merge
-    needs: find_pr
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
-    steps:
-      - name: Tear down container
-        if: needs.check_changed_folders.outputs.run_container == 'true'
-        run: 'cd container/cdk && cdk destroy pr${{needs.find_pr.outputs.pr}}-ContainerStack'
-      - name: Tear down hometown
-        if: needs.check_changed_folders.outputs.run_hometown == 'true'
-        run: 'cd container/cdk && cdk destroy pr${{needs.find_pr.outputs.pr}}-HometownStack'
+#   destroy:
+#     name: Tear down stacks on merge
+#     needs: find_pr
+#     runs-on: ubuntu-latest
+#     if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+#     steps:
+#       - name: Tear down container
+#         if: needs.check_changed_folders.outputs.run_container == 'true'
+#         run: 'cd container/cdk && cdk destroy pr${{needs.find_pr.outputs.pr}}-ContainerStack'
+#       - name: Tear down hometown
+#         if: needs.check_changed_folders.outputs.run_hometown == 'true'
+#         run: 'cd container/cdk && cdk destroy pr${{needs.find_pr.outputs.pr}}-HometownStack'
 
   container_job:
     name: Deploy Container MFE
